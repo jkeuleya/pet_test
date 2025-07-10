@@ -224,3 +224,4 @@ Import `Pet_Vaccination_API.postman_collection.json` for ready-to-use API reques
 - Add security layers
 - Add tracking / monitoring
 - Add alerting
+- Add cache

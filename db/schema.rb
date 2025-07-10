@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_07_10_131428) do
+ActiveRecord::Schema[7.2].define(version: 2025_07_10_180000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -21,7 +21,9 @@ ActiveRecord::Schema[7.2].define(version: 2025_07_10_131428) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.datetime "last_notification_sent_at"
+    t.index ["breed", "age"], name: "index_pets_on_breed_and_age"
     t.index ["breed"], name: "index_pets_on_breed"
+    t.index ["last_notification_sent_at"], name: "index_pets_on_last_notification_sent_at"
     t.index ["name"], name: "index_pets_on_name"
   end
 
@@ -33,10 +35,13 @@ ActiveRecord::Schema[7.2].define(version: 2025_07_10_131428) do
     t.boolean "expired", default: false, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["expired", "expiry_date"], name: "index_vaccination_records_on_expired_and_expiry_date"
     t.index ["expired"], name: "index_vaccination_records_on_expired"
     t.index ["expiry_date"], name: "index_vaccination_records_on_expiry_date"
     t.index ["pet_id", "expired"], name: "index_vaccination_records_on_pet_id_and_expired"
+    t.index ["pet_id", "expiry_date"], name: "index_vaccination_records_on_pet_id_and_expiry_date"
     t.index ["pet_id"], name: "index_vaccination_records_on_pet_id"
+    t.index ["vaccination_date"], name: "index_vaccination_records_on_vaccination_date"
   end
 
   add_foreign_key "vaccination_records", "pets"
