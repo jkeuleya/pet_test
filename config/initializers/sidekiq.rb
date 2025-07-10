@@ -12,14 +12,6 @@ Sidekiq.configure_server do |config|
   if defined?(Sidekiq::Cron)
     require 'sidekiq-cron'
 
-    # Define cron jobs
-    Sidekiq::Cron::Job.create(
-      name: 'Check Expired Vaccinations',
-      cron: '0 9 * * *',  # Every day at 9am
-      class: 'CheckExpiredVaccinationsJob',
-      queue: 'low'
-    )
-
     Rails.logger.info "Sidekiq-cron jobs loaded"
   end
 end
