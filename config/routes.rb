@@ -8,6 +8,10 @@ Rails.application.routes.draw do
   # API routes
   namespace :api do
     namespace :v1 do
+      # Health checks
+      get 'health', to: 'health#index'
+      get 'health/detailed', to: 'health#detailed'
+
       resources :pets do
         resources :vaccination_records do
           member do
