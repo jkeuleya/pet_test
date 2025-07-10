@@ -13,7 +13,7 @@ gem 'redis', '>= 4.0.1'
 
 # Background jobs
 gem 'sidekiq', '~> 7.2'
-gem 'sidekiq-cron', '~> 1.12'
+gem 'sidekiq-cron', '~> 2.3'
 
 # Serialization
 gem 'active_model_serializers', '~> 0.10.14'
