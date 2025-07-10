@@ -10,6 +10,7 @@ class VaccinationRecord < ApplicationRecord
 
   # Callbacks
   before_save :check_if_expired
+  after_update :send_expiration_notification, if: :saved_change_to_expired?
 
   # Scopes
   scope :expired, -> { where(expired: true) }
@@ -51,5 +52,11 @@ class VaccinationRecord < ApplicationRecord
 
   def check_if_expired
     self.expired = true if expiry_date && expiry_date < Date.current
+  end
+
+  def send_expiration_notification
+    return unless expired?
+
+    VaccinationExpirationJob.perform_later(self)
   end
 end
