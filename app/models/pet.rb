@@ -11,11 +11,20 @@ class Pet < ApplicationRecord
     less_than_or_equal_to: 30
   }
 
-  # Scopes
+  # Scopes - optimized for database indexes
   scope :young, -> { where('age < ?', 2) }
   scope :adult, -> { where('age >= ? AND age < ?', 2, 8) }
   scope :senior, -> { where('age >= ?', 8) }
-  scope :by_breed, ->(breed) { where(breed: breed) }
+  scope :by_breed, ->(breed) { where('LOWER(breed) = LOWER(?)', breed) }
+
+  # Avoid us using DISTINCT as it can be expensive on large datasets
+  scope :with_expired_vaccinations, -> {
+    where('EXISTS (SELECT 1 FROM vaccination_records WHERE vaccination_records.pet_id = pets.id AND vaccination_records.expired = true)')
+  }
+
+  scope :without_expired_vaccinations, -> {
+    where('NOT EXISTS (SELECT 1 FROM vaccination_records WHERE vaccination_records.pet_id = pets.id AND vaccination_records.expired = true)')
+  }
 
   # Instance methods
   def age_category
@@ -27,13 +36,13 @@ class Pet < ApplicationRecord
   end
 
   def has_expired_vaccinations?
-    vaccination_records.where(expired: true).exists?
+    vaccination_records.expired.exists?
   end
 
   def upcoming_vaccination_expirations(days = 30)
     vaccination_records
-      .where(expired: false)
-      .where('expiry_date <= ?', days.days.from_now)
+      .active
+      .expiring_soon(days)
       .order(expiry_date: :asc)
   end
 end

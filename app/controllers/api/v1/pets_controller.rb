@@ -63,23 +63,44 @@ module Api
       end
 
       def filter_pets(pets)
+        # Apply breed filter
         pets = pets.by_breed(params[:breed]) if params[:breed].present?
-        pets = pets.young if params[:age_category] == 'young'
-        pets = pets.adult if params[:age_category] == 'adult'
-        pets = pets.senior if params[:age_category] == 'senior'
 
-        # Filter for pets with expired vaccinations
+        # Apply age category filter using scopes
+        pets = case params[:age_category]
+               when 'young' then pets.young
+               when 'adult' then pets.adult
+               when 'senior' then pets.senior
+               else pets
+               end
+
+        # Optimize expired vaccinations filter with a single query
         if params[:has_expired_vaccinations].present?
-          pet_ids = Pet.joins(:vaccination_records)
-                       .where(vaccination_records: { expired: true })
-                       .distinct
-                       .pluck(:id)
-          pets = params[:has_expired_vaccinations] == 'true' ?
-                   pets.where(id: pet_ids) :
-                   pets.where.not(id: pet_ids)
+          pets = if params[:has_expired_vaccinations] == 'true'
+                   pets.with_expired_vaccinations
+                 else
+                   pets.without_expired_vaccinations
+                 end
         end
 
-        pets.order(created_at: :desc)
+        # Apply sorting with whitelisted fields
+        apply_sorting(pets)
+      end
+
+      # Can be little bit heavy too on large datasets, just had fun here. Can be reworked
+      def apply_sorting(scope)
+        return scope.order(created_at: :desc) unless params[:sort].present?
+
+        # Whitelist sortable fields for security
+        sortable_fields = %w[name breed age created_at updated_at]
+        field = params[:sort].gsub(/^-/, '')
+        direction = params[:sort].start_with?('-') ? :desc : :asc
+
+        if sortable_fields.include?(field)
+          scope.order(field => direction)
+        else
+          scope.order(created_at: :desc)
+        end
       end
     end
   end
