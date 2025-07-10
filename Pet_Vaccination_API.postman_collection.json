@@ -1,0 +1,485 @@
+{
+	"info": {
+		"_postman_id": "765c6013-f3e5-4797-8765-297efb478c9a",
+		"name": "Pet Vaccination API",
+		"description": "REST API for managing pets and their vaccination records",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "4089998"
+	},
+	"item": [
+		{
+			"name": "Pets",
+			"item": [
+				{
+					"name": "List all pets",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/pets",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"pets"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1",
+									"description": "Page number",
+									"disabled": true
+								},
+								{
+									"key": "per_page",
+									"value": "25",
+									"description": "Items per page (max 100)",
+									"disabled": true
+								},
+								{
+									"key": "breed",
+									"value": "Labrador",
+									"description": "Filter by breed",
+									"disabled": true
+								},
+								{
+									"key": "age_category",
+									"value": "adult",
+									"description": "Filter by age category (young, adult, senior)",
+									"disabled": true
+								},
+								{
+									"key": "has_expired_vaccinations",
+									"value": "true",
+									"description": "Filter pets with expired vaccinations (true/false)",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create a pet",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"pet\": {\n    \"name\": \"Jean\",\n    \"breed\": \"Golden Retriever\",\n    \"age\": 8\n  }\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/v1/pets",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"pets"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get pet details",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/pets/:id",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"pets",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "",
+									"description": "Pet ID"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update a pet",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"pet\": {\n    \"age\": 4\n  }\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/v1/pets/:id",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"pets",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1",
+									"description": "Pet ID"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete a pet",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/pets/:id",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"pets",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1",
+									"description": "Pet ID"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Vaccination Records",
+			"item": [
+				{
+					"name": "List pet vaccinations",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/pets/:pet_id/vaccination_records",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"pets",
+								":pet_id",
+								"vaccination_records"
+							],
+							"query": [
+								{
+									"key": "status",
+									"value": "expired",
+									"description": "Filter by status (expired, active)",
+									"disabled": true
+								},
+								{
+									"key": "days_until_expiry",
+									"value": "30",
+									"description": "Filter vaccinations expiring within X days",
+									"disabled": true
+								}
+							],
+							"variable": [
+								{
+									"key": "pet_id",
+									"value": "1",
+									"description": "Pet ID"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create vaccination record",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"vaccination_record\": {\n    \"name\": \"Rage Vaccine\",\n    \"vaccination_date\": \"2024-01-15\",\n    \"expiry_date\": \"2025-01-15\"\n  }\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/v1/pets/:pet_id/vaccination_records",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"pets",
+								":pet_id",
+								"vaccination_records"
+							],
+							"variable": [
+								{
+									"key": "pet_id",
+									"value": "1",
+									"description": "Pet ID"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get vaccination details",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/pets/:pet_id/vaccination_records/:id",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"pets",
+								":pet_id",
+								"vaccination_records",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "pet_id",
+									"value": "1",
+									"description": "Pet ID"
+								},
+								{
+									"key": "id",
+									"value": "1",
+									"description": "Vaccination record ID"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update vaccination record",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"vaccination_record\": {\n    \"expiry_date\": \"2025-06-15\"\n  }\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/v1/pets/:pet_id/vaccination_records/:id",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"pets",
+								":pet_id",
+								"vaccination_records",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "pet_id",
+									"value": "1",
+									"description": "Pet ID"
+								},
+								{
+									"key": "id",
+									"value": "1",
+									"description": "Vaccination record ID"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Mark vaccination as expired",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/pets/:pet_id/vaccination_records/:id/mark_as_expired",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"pets",
+								":pet_id",
+								"vaccination_records",
+								":id",
+								"mark_as_expired"
+							],
+							"variable": [
+								{
+									"key": "pet_id",
+									"value": "1",
+									"description": "Pet ID"
+								},
+								{
+									"key": "id",
+									"value": "1",
+									"description": "Vaccination record ID"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete vaccination record",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/pets/:pet_id/vaccination_records/:id",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"pets",
+								":pet_id",
+								"vaccination_records",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "pet_id",
+									"value": "1",
+									"description": "Pet ID"
+								},
+								{
+									"key": "id",
+									"value": "1",
+									"description": "Vaccination record ID"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Health Checks",
+			"item": [
+				{
+					"name": "Basic Health Check",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/health",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"health"
+							]
+						},
+						"description": "Basic health check showing status of database, Redis, and Sidekiq"
+					},
+					"response": []
+				},
+				{
+					"name": "Rails Health Check",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/up",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"up"
+							]
+						},
+						"description": "Rails default health check endpoint"
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:3000",
+			"type": "string"
+		}
+	]
+}

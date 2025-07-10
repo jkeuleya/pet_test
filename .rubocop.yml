@@ -55,11 +55,18 @@ Metrics/BlockLength:
 
 Metrics/ClassLength:
   Max: 150
+  Exclude:
+    - "app/controllers/api/v1/health_controller.rb"
 
 Metrics/AbcSize:
   Max: 20
 
 # Rails specific rules
+Rails/SkipsModelValidations:
+  Exclude:
+    - "app/models/vaccination_record.rb"
+    - "app/jobs/vaccination_expiration_job.rb"
+
 Rails/Output:
   Exclude:
     - "db/seeds.rb"
@@ -77,6 +84,11 @@ RSpec/NestedGroups:
 # FactoryBot rules
 FactoryBot/ConsistentParenthesesStyle:
   EnforcedStyle: omit_parentheses
+
+# Allow certain patterns
+Naming/PredicateName:
+  AllowedMethods:
+    - has_expired_vaccinations?
 
 Style/HashSyntax:
   EnforcedStyle: ruby19_no_mixed_keys
