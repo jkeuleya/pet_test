@@ -12,17 +12,17 @@ class Pet < ApplicationRecord
   }
 
   # Scopes - optimized for database indexes
-  scope :young, -> { where('age < ?', 2) }
-  scope :adult, -> { where('age >= ? AND age < ?', 2, 8) }
-  scope :senior, -> { where('age >= ?', 8) }
+  scope :young, -> { where(age: ...2) }
+  scope :adult, -> { where(age: 2...8) }
+  scope :senior, -> { where(age: 8..) }
   scope :by_breed, ->(breed) { where('LOWER(breed) = LOWER(?)', breed) }
 
   # Avoid us using DISTINCT as it can be expensive on large datasets
-  scope :with_expired_vaccinations, -> {
+  scope :with_expired_vaccinations, lambda {
     where('EXISTS (SELECT 1 FROM vaccination_records WHERE vaccination_records.pet_id = pets.id AND vaccination_records.expired = true)')
   }
 
-  scope :without_expired_vaccinations, -> {
+  scope :without_expired_vaccinations, lambda {
     where('NOT EXISTS (SELECT 1 FROM vaccination_records WHERE vaccination_records.pet_id = pets.id AND vaccination_records.expired = true)')
   }
 

@@ -89,7 +89,7 @@ module Api
 
       # Can be little bit heavy too on large datasets, just had fun here. Can be reworked
       def apply_sorting(scope)
-        return scope.order(created_at: :desc) unless params[:sort].present?
+        return scope.order(created_at: :desc) if params[:sort].blank?
 
         # Whitelist sortable fields for security
         sortable_fields = %w[name breed age created_at updated_at]

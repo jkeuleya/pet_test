@@ -16,10 +16,9 @@ RSpec.describe VaccinationRecord, type: :model do
 
       it 'validates expiry_date is after vaccination_date' do
         record = build(:vaccination_record,
-          pet: pet,
-          vaccination_date: Date.current,
-          expiry_date: Date.current - 1.day
-        )
+                       pet: pet,
+                       vaccination_date: Date.current,
+                       expiry_date: Date.current - 1.day)
 
         expect(record).not_to be_valid
         expect(record.errors[:expiry_date]).to include('must be after vaccination date')
@@ -27,10 +26,9 @@ RSpec.describe VaccinationRecord, type: :model do
 
       it 'allows expiry_date after vaccination_date' do
         record = build(:vaccination_record,
-          pet: pet,
-          vaccination_date: Date.current,
-          expiry_date: Date.current + 1.year
-        )
+                       pet: pet,
+                       vaccination_date: Date.current,
+                       expiry_date: Date.current + 1.year)
 
         expect(record).to be_valid
       end
@@ -41,20 +39,18 @@ RSpec.describe VaccinationRecord, type: :model do
     describe 'before_save' do
       it 'sets expired to true if expiry_date is in the past' do
         record = create(:vaccination_record,
-          vaccination_date: 2.years.ago,
-          expiry_date: 1.year.ago,
-          expired: false
-        )
+                        vaccination_date: 2.years.ago,
+                        expiry_date: 1.year.ago,
+                        expired: false)
 
         expect(record.expired).to be true
       end
 
       it 'keeps expired as false if expiry_date is in the future' do
         record = create(:vaccination_record,
-          vaccination_date: Date.current,
-          expiry_date: 1.year.from_now,
-          expired: false
-        )
+                        vaccination_date: Date.current,
+                        expiry_date: 1.year.from_now,
+                        expired: false)
 
         expect(record.expired).to be false
       end
@@ -126,10 +122,9 @@ RSpec.describe VaccinationRecord, type: :model do
       let!(:should_expire) do
         # Create with future date first to bypass the before_save callback
         record = create(:vaccination_record,
-          vaccination_date: 2.years.ago,
-          expiry_date: 1.day.from_now,
-          expired: false
-        )
+                        vaccination_date: 2.years.ago,
+                        expiry_date: 1.day.from_now,
+                        expired: false)
         # Then update the expiry_date directly in the database
         record.update_column(:expiry_date, 1.day.ago)
         record
@@ -146,13 +141,13 @@ RSpec.describe VaccinationRecord, type: :model do
       it 'does not affect already expired records' do
         expect {
           VaccinationRecord.mark_expired_records
-        }.not_to change { already_expired.reload.expired }
+        }.not_to(change { already_expired.reload.expired })
       end
 
       it 'does not affect records with future expiry dates' do
         expect {
           VaccinationRecord.mark_expired_records
-        }.not_to change { not_expired.reload.expired }
+        }.not_to(change { not_expired.reload.expired })
       end
     end
   end

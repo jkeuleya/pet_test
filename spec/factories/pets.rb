@@ -1,7 +1,7 @@
 FactoryBot.define do
   factory :pet do
     name { Faker::Creature::Dog.name }
-    breed { ["Labrador", "Golden Retriever", "German Shepherd", "Beagle", "Poodle", "Siamese Cat", "Persian Cat", "Maine Coon"].sample }
+    breed { ['Labrador', 'Golden Retriever', 'German Shepherd', 'Beagle', 'Poodle', 'Siamese Cat', 'Persian Cat', 'Maine Coon'].sample }
     age { rand(1..15) }
 
     trait :young do

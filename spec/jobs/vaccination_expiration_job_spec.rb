@@ -13,7 +13,7 @@ RSpec.describe VaccinationExpirationJob, type: :job do
 
     it 'handles non-existent vaccination records gracefully' do
       expect {
-        VaccinationExpirationJob.new.perform(999999)
+        VaccinationExpirationJob.new.perform(999_999)
       }.not_to raise_error
     end
 
@@ -21,7 +21,7 @@ RSpec.describe VaccinationExpirationJob, type: :job do
       pet = vaccination_record.pet
       expect {
         VaccinationExpirationJob.new.perform(vaccination_record.id)
-      }.to change { pet.reload.last_notification_sent_at }
+      }.to(change { pet.reload.last_notification_sent_at })
     end
 
     context 'with webhook configured' do

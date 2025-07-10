@@ -37,7 +37,7 @@ module Api
       def check_database
         ActiveRecord::Base.connection.execute('SELECT 1')
         { status: 'healthy', response_time: measure_time { Pet.first } }
-      rescue => e
+      rescue StandardError => e
         { status: 'unhealthy', error: e.message }
       end
 
@@ -50,7 +50,7 @@ module Api
           status: 'healthy',
           response_time: "#{((Time.current - start_time) * 1000).round(2)}ms"
         }
-      rescue => e
+      rescue StandardError => e
         { status: 'unhealthy', error: e.message }
       end
 
@@ -58,10 +58,10 @@ module Api
         processes = Sidekiq::ProcessSet.new
 
         {
-          status: processes.size > 0 ? 'healthy' : 'unhealthy',
+          status: processes.size.positive? ? 'healthy' : 'unhealthy',
           processes: processes.size
         }
-      rescue => e
+      rescue StandardError => e
         { status: 'unhealthy', error: e.message }
       end
 

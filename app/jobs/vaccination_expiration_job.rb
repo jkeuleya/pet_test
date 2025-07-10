@@ -5,7 +5,7 @@ class VaccinationExpirationJob < ApplicationJob
   sidekiq_options retry: 3, dead: false
 
   # Error handling with exponential backoff retry
-  sidekiq_retry_in do |count, exception|
+  sidekiq_retry_in do |count, _exception|
     case count
     when 0 then 10.seconds
     when 1 then 1.minute
@@ -23,16 +23,16 @@ class VaccinationExpirationJob < ApplicationJob
     return unless vaccination_record
 
     # Simulate email sending
-    Rails.logger.info "=" * 60
-    Rails.logger.info "VACCINATION EXPIRATION NOTIFICATION"
-    Rails.logger.info "=" * 60
+    Rails.logger.info '=' * 60
+    Rails.logger.info 'VACCINATION EXPIRATION NOTIFICATION'
+    Rails.logger.info '=' * 60
     Rails.logger.info "Pet: #{vaccination_record.pet.name}"
     Rails.logger.info "Breed: #{vaccination_record.pet.breed}"
     Rails.logger.info "Vaccination: #{vaccination_record.name}"
     Rails.logger.info "Vaccination Date: #{vaccination_record.vaccination_date}"
     Rails.logger.info "Expiry Date: #{vaccination_record.expiry_date}"
-    Rails.logger.info "Status: EXPIRED"
-    Rails.logger.info "=" * 60
+    Rails.logger.info 'Status: EXPIRED'
+    Rails.logger.info '=' * 60
 
     # In a real environment, we would use ActionMailer here
     # VaccinationMailer.expiration_notification(vaccination_record).deliver_later

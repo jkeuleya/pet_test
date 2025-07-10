@@ -7,7 +7,7 @@ RSpec.describe 'Api::V1::Health', type: :request do
 
       expect(response).to have_http_status(:ok)
       expect(json_response).to include(
-        'status' => be_in(['healthy', 'degraded', 'unhealthy']),
+        'status' => be_in(%w[healthy degraded unhealthy]),
         'timestamp' => be_present,
         'services' => be_a(Hash)
       )
@@ -17,7 +17,7 @@ RSpec.describe 'Api::V1::Health', type: :request do
       get '/api/v1/health'
 
       expect(json_response['services']).to include(
-        'database' => include('status' => be_in(['healthy', 'unhealthy']))
+        'database' => include('status' => be_in(%w[healthy unhealthy]))
       )
     end
 
@@ -25,7 +25,7 @@ RSpec.describe 'Api::V1::Health', type: :request do
       get '/api/v1/health'
 
       expect(json_response['services']).to include(
-        'redis' => include('status' => be_in(['healthy', 'unhealthy']))
+        'redis' => include('status' => be_in(%w[healthy unhealthy]))
       )
     end
 
@@ -33,7 +33,7 @@ RSpec.describe 'Api::V1::Health', type: :request do
       get '/api/v1/health'
 
       expect(json_response['services']).to include(
-        'sidekiq' => include('status' => be_in(['healthy', 'unhealthy']))
+        'sidekiq' => include('status' => be_in(%w[healthy unhealthy]))
       )
     end
 

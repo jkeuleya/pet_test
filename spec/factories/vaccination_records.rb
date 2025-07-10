@@ -1,7 +1,7 @@
 FactoryBot.define do
   factory :vaccination_record do
     association :pet
-    name { ["Rage Vaccine", "DHPP Vaccine", "Bordetella", "Lyme Disease", "Feline Leukemia", "FVRCP Vaccine"].sample }
+    name { ['Rage Vaccine', 'DHPP Vaccine', 'Bordetella', 'Lyme Disease', 'Feline Leukemia', 'FVRCP Vaccine'].sample }
     vaccination_date { Faker::Date.between(from: 1.year.ago, to: Date.current) }
     expiry_date { vaccination_date + 1.year }
     expired { false }

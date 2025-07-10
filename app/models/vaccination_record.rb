@@ -15,8 +15,8 @@ class VaccinationRecord < ApplicationRecord
   # Scopes
   scope :expired, -> { where(expired: true) }
   scope :active, -> { where(expired: false) }
-  scope :expiring_soon, ->(days = 30) {
-    active.where('expiry_date <= ?', days.days.from_now)
+  scope :expiring_soon, lambda { |days = 30|
+    active.where(expiry_date: ..days.days.from_now)
   }
   scope :by_pet, ->(pet_id) { where(pet_id: pet_id) }
 
@@ -29,6 +29,7 @@ class VaccinationRecord < ApplicationRecord
   # Instance methods
   def days_until_expiry
     return 0 if expired?
+
     (expiry_date - Date.current).to_i
   end
 
@@ -45,9 +46,9 @@ class VaccinationRecord < ApplicationRecord
   def expiry_date_after_vaccination_date
     return unless vaccination_date && expiry_date
 
-    if expiry_date <= vaccination_date
-      errors.add(:expiry_date, 'must be after vaccination date')
-    end
+    return unless expiry_date <= vaccination_date
+
+    errors.add(:expiry_date, 'must be after vaccination date')
   end
 
   def check_if_expired

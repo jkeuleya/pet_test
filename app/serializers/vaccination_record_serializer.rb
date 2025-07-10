@@ -10,6 +10,6 @@ class VaccinationRecordSerializer < ActiveModel::Serializer
 
   def include_pet?
     @instance_options[:include_pet] ||
-    @instance_options[:include] && @instance_options[:include].include?(:pet)
+      @instance_options[:include]&.include?(:pet)
   end
 end
