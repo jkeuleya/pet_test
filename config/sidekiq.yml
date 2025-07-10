@@ -1,0 +1,19 @@
+# Sidekiq configuration
+:concurrency: <%= ENV.fetch("SIDEKIQ_CONCURRENCY", 5) %>
+
+# Queues with priorities
+:queues:
+  - [critical, 3]
+  - [default, 2]
+  - [low, 1]
+
+# Environment-specific settings
+development:
+  :concurrency: 2
+
+production:
+  :concurrency: 10
+
+# Dead jobs retention (30 days)
+:dead_max_jobs: 10000
+:dead_timeout_in_seconds: 2592000
