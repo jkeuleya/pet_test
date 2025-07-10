@@ -4,7 +4,7 @@ module Api
       before_action :set_pet, only: [:show, :update, :destroy]
 
       def index
-        pets = Pet
+        pets = Pet.includes(:vaccination_records)
         pets = filter_pets(pets)
 
         result = paginate(pets)
@@ -67,6 +67,17 @@ module Api
         pets = pets.young if params[:age_category] == 'young'
         pets = pets.adult if params[:age_category] == 'adult'
         pets = pets.senior if params[:age_category] == 'senior'
+
+        # Filter for pets with expired vaccinations
+        if params[:has_expired_vaccinations].present?
+          pet_ids = Pet.joins(:vaccination_records)
+                       .where(vaccination_records: { expired: true })
+                       .distinct
+                       .pluck(:id)
+          pets = params[:has_expired_vaccinations] == 'true' ?
+                   pets.where(id: pet_ids) :
+                   pets.where.not(id: pet_ids)
+        end
 
         pets.order(created_at: :desc)
       end

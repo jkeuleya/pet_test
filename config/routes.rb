@@ -8,7 +8,13 @@ Rails.application.routes.draw do
   # API routes
   namespace :api do
     namespace :v1 do
-      resources :pets
+      resources :pets do
+        resources :vaccination_records do
+          member do
+            post :mark_as_expired
+          end
+        end
+      end
     end
   end
 

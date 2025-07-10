@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_07_10_130924) do
+ActiveRecord::Schema[7.2].define(version: 2025_07_10_130940) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -23,4 +23,20 @@ ActiveRecord::Schema[7.2].define(version: 2025_07_10_130924) do
     t.index ["breed"], name: "index_pets_on_breed"
     t.index ["name"], name: "index_pets_on_name"
   end
+
+  create_table "vaccination_records", force: :cascade do |t|
+    t.bigint "pet_id", null: false
+    t.string "name", null: false
+    t.date "vaccination_date", null: false
+    t.date "expiry_date", null: false
+    t.boolean "expired", default: false, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["expired"], name: "index_vaccination_records_on_expired"
+    t.index ["expiry_date"], name: "index_vaccination_records_on_expiry_date"
+    t.index ["pet_id", "expired"], name: "index_vaccination_records_on_pet_id_and_expired"
+    t.index ["pet_id"], name: "index_vaccination_records_on_pet_id"
+  end
+
+  add_foreign_key "vaccination_records", "pets"
 end

@@ -1,4 +1,7 @@
 class Pet < ApplicationRecord
+  # Associations
+  has_many :vaccination_records, dependent: :destroy
+
   # Validations
   validates :name, presence: true, length: { minimum: 2, maximum: 100 }
   validates :breed, presence: true, length: { minimum: 2, maximum: 100 }
@@ -21,5 +24,16 @@ class Pet < ApplicationRecord
     when 2..7 then 'adult'
     else 'senior'
     end
+  end
+
+  def has_expired_vaccinations?
+    vaccination_records.where(expired: true).exists?
+  end
+
+  def upcoming_vaccination_expirations(days = 30)
+    vaccination_records
+      .where(expired: false)
+      .where('expiry_date <= ?', days.days.from_now)
+      .order(expiry_date: :asc)
   end
 end
