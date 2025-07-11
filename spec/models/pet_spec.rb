@@ -57,9 +57,9 @@ RSpec.describe Pet, type: :model do
 
   describe 'instance methods' do
     describe '#age_category' do
-      it 'returns correct category for puppies/kittens' do
+      it 'returns correct category for young pets' do
         pet = build(:pet, age: 1)
-        expect(pet.age_category).to eq('puppy/kitten')
+        expect(pet.age_category).to eq('young')
       end
 
       it 'returns correct category for adults' do

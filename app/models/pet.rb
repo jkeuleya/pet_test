@@ -29,7 +29,7 @@ class Pet < ApplicationRecord
   # Instance methods
   def age_category
     case age
-    when 0..1 then 'puppy/kitten'
+    when 0..1 then 'young'
     when 2..7 then 'adult'
     else 'senior'
     end
