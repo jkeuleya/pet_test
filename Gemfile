@@ -61,7 +61,7 @@ end
 
 group :test do
   # Database cleaner for tests
-  gem 'database_cleaner-active_record', '~> 2.1'
+  gem 'database_cleaner-active_record', '~> 2.2'
   # Test Sidekiq jobs
   gem 'rspec-sidekiq', '~> 4.1'
 end
